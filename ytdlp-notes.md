@@ -25,4 +25,4 @@ else
 fi
 ```
 The script need `wofi` or `fuzzel` or `bemenu`, and a terminal like `alacritty`.
-Then put it in the $PATH and execute.
+Then put it in the $PATH and execute it.
