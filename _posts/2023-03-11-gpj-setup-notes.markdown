@@ -71,7 +71,7 @@ the `--webrick` error happen, run the following first;
 ```
 $ bundle add webrick
 ```
-then run again the following;
+see: [jekyll serve fails on Ruby 3.0](https://github.com/jekyll/jekyll/issues/8523), then run again the following;
 ```
 $ bundle exec jekyll serve
 ```
