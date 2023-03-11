@@ -8,6 +8,3 @@ After getting update of ydotool version 1.0.2-1 in Arch Linux, `ydotool` is not 
 
 ## [yt-dlp notes](ytdlp-notes.md)
 The script to download video or audio file from YouTube using [yt-dlp](https://github.com/yt-dlp/yt-dlp) .....
-
-## [TEST html](TEST.html)
-this is teating html
