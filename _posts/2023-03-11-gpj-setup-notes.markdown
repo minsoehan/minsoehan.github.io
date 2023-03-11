@@ -7,7 +7,7 @@ categories: howto
 
 # Setting up GitHub Pages static website with Jekyll
 
-See: [GitHub Pages](https://pages.github.com/) _don't forget to scroll down_
+See: [GitHub Pages](https://pages.github.com/) _don't forget to scroll down_.  
 Create GitHub pages website first following [Create a GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 
 Then [set up site with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll)
