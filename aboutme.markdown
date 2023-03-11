@@ -3,7 +3,6 @@ layout: page
 title: About Me
 permalink: /aboutme/
 ---
-
 My name is Min Soe Han. This is minsoehan's static website of github pages.
 It hosts my personal notes, scripts, codes and any other resources.
 All things on this site are intended for just personal use. Therefore, please use them at your own risk.
