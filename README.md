@@ -36,3 +36,23 @@ There are many options and options of options. In fact, I just need to download 
 I don't really care this and that. So, I created the following script. ...
 
 ---
+
+### [msh patches for dwl-0.4](dwlmsh045-5pc.md)
+
+2023-03-12 Sunday 16:07 04:07:17 PM
+
+Combination of 5 following patches.
+
+1. autostart
+2. alwayscenter
+3. cursorwarp (msh edited)
+4. shiftview
+
+---
+
+### minsoehan
+
+phone: 09257313341
+email: minsoehan243@gmail.com
+
+---
