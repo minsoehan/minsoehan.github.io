@@ -10,7 +10,8 @@ I also install 10-15 AUR packages in my Arch Linux system.
 But I am not a vary advanced user. I usually don't need to edit this and that.
 I just need to install and update AUR package. There are AUR Helpers out there.
 They are very advanced and complicated to me. So I wrote the following script for my personal use.
-It is a `dash` script and very fast.
+It is a `dash` script and very fast. The following script can be cloned from my [mshii repository](https://github.com/minsoehan/mshii)
+[The direct link to the script.](https://github.com/minsoehan/mshii/blob/main/mur)
 ```bash
 #!/bin/dash
 
