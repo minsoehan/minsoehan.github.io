@@ -1,11 +1,7 @@
----
-layout: post
-title:  "yt-dlp notes"
-date:   2023-03-11 15:56:00 +0630
-categories: tnt
----
+# yt-dlp notes
 
-## yt-dlp notes
+2023-03-12 Sunday 15:18 03:18:36 PM
+
 Recently I uninstall [youtube-dl](https://github.com/ytdl-org/youtube-dl) and install [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
 I was surprised when I look at [yt-dlp (1) man page](https://man.archlinux.org/man/community/yt-dlp/yt-dlp.1.en).

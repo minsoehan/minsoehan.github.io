@@ -1,11 +1,7 @@
----
-layout: post
-title:  "ydotool notes"
-date:   2023-03-11 15:46:00 +0630
-categories: tsnotes
----
-
 # ydotool
+
+2023-03-12 Sunday 15:18 03:18:00 PM
+
 After getting update of ydotool version 1.0.2-1 in Arch Linux
 ```
 [2023-03-07T09:34:07+0630] [ALPM] upgraded ydotool (1.0.1-3 -> 1.0.2-1)

@@ -1,9 +1,6 @@
----
-layout: post
-title:  "AUR Helper script"
-date:   2023-03-12 12:20:00 +0630
-categories: tnt
----
+# AUR Helper script
+
+2023-03-12 Sunday 15:19 03:19:03 PM
 
 Every Arch Linux user usually install AUR packages at some point.
 I also install 10-15 AUR packages in my Arch Linux system.
