@@ -11,7 +11,7 @@ Recent I uninstall [youtube-dl](https://github.com/ytdl-org/youtube-dl) and inst
 I was surprised when I look at [yt-dlp (1) man page](https://man.archlinux.org/man/community/yt-dlp/yt-dlp.1.en).
 There are many options and options of options :). In fact, I just need to download video or audio file with quality as good as possible.
 I don't really care this and that. So, I created the following script.
-```
+```bash
 #!/bin/dash
 
 durl=$(wl-paste)
