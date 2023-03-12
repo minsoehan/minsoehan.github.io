@@ -15,7 +15,7 @@ $ cd /path/to/dwl-v04
 $ cp /path/to/thispatchfile.diff ./
 $ patch -p1 < ./thispatchfile.diff
 ```
-Using the folling patch, config.def.h will be splitted into 3 .h file as config.h, kbconfig.h and ruconfig.h files.
+Using the folling patch, config.def.h will be splitted into 3 files as config.h, kbconfig.h and ruconfig.h files.
 
 ```diff
 This is minsoehan's combining the following 5 patches to dwl-v04
@@ -24,7 +24,7 @@ This is minsoehan's combining the following 5 patches to dwl-v04
     3. keycodes
     4. msh-cursorwarp
     5. shiftview
-Using the folling patch, config.def.h will be splitted into 3 .h file as
+Using the folling patch, config.def.h will be splitted into 3 files as
 config.h, kbconfig.h and ruconfig.h files.
 
 --- a/config.mk	2022-12-31 03:18:07.000000000 +0630
