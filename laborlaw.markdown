@@ -4,4 +4,4 @@ title: Labour Law
 permalink: /laborlaw/
 ---
 
-This is testing
+This is the page of labour law in Myanmar.
