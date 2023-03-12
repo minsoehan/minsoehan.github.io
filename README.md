@@ -50,6 +50,23 @@ Combination of 5 following patches.
 
 ---
 
+### [zoom link redirection](zoomredirect.md)
+
+2023-03-12 Sunday 19:07 07:07:23 PM
+
+If a zoom line is open in browser, it force to launch `zoom` application.
+It is annoying. To join a zoom meeting in browser, the zoom link need to be adjusted. For example, ...
+
+---
+
+### [git push files](gitpush.md)
+
+2023-03-12 Sunday 19:09 07:09:19 PM
+
+To push files in a local folder to github repository, go in the folder and run ...
+
+---
+
 ### minsoehan
 
 phone: 09257313341  
