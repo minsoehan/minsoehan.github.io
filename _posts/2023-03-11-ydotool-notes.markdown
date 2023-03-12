@@ -2,7 +2,7 @@
 layout: post
 title:  "ydotool notes"
 date:   2023-03-11 15:46:00 +0630
-categories: jekyll update
+categories: tsnotes
 ---
 
 # ydotool
