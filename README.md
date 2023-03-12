@@ -5,7 +5,7 @@ It is recommended to do your owned research and try to understand what you are d
 
 ---
 
-## [AUR Helper script](iimur.md)
+### [AUR Helper script](iimur.md)
 
 2023-03-12 Sunday 15:01 03:01:50 PM
 
@@ -13,7 +13,8 @@ The dash script to search, download, install and update AUR package in Arch Linu
 
 ---
 
-## [ydotool notes](ydotool-notes.md)
+### [ydotool notes](ydotool-notes.md)
+
 2023-03-12 Sunday 15:03 03:03:03 PM
 
 After getting update of ydotool version 1.0.2-1 in Arch Linux
@@ -24,7 +25,7 @@ doing ydotool without sudo is not working any more ...
 
 ---
 
-## [yt-dlp notes](ytdlp-notes.md)
+### [yt-dlp notes](ytdlp-notes.md)
 
 2023-03-12 Sunday 15:08 03:08:04 PM
 
