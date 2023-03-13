@@ -1,4 +1,4 @@
-This is minsoehan's static website of github pages.
+This is minsoehan's static website using GitHub Pages.
 It hosts my personal notes, scripts, codes and any other resources.
 All things on this site are intended for just personal use. Therefore, please use them at your own risk.
 It is recommended to do your owned research and try to understand what you are doing first.
