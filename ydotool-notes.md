@@ -8,7 +8,7 @@ After getting update of ydotool version 1.0.2-1 in Arch Linux
 ```
 doing ydotool without sudo got the following message
 ```
-~]$ ydotool type TESTING
+$ ydotool type TESTING
 Segmentation fault (core dumped)
 ```
 It happens if the user was added to `input` group and the `ydotool.service` *user* service was enabled and started.
