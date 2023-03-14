@@ -7,7 +7,7 @@ It is annoying. To join a zoom meeting in browser, the zoom link need to be adju
 `https://us04web.zoom.us/j/9547148797` to  
 `https://us04web.zoom.us/wc/9547148797/join`
 
-![zoom redirection](bag/zoom-redirector.jpg)
+![zoom redirection](../bag/zoom-redirector.jpg)
 
 ---
 

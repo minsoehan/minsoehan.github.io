@@ -23,8 +23,8 @@ $ git commit -m "write commit"
 $ git push -u origin main
 ```
 see: photos
-![git push http](bag/gitpush-http.png)
-![git push ssh](bag/gitpush-ssh.png)
+![git push http](../bag/gitpush-http.png)
+![git push ssh](../bag/gitpush-ssh.png)
 
 ---
 
