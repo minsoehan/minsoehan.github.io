@@ -5,7 +5,7 @@ It is recommended to do your owned research and try to understand what you are d
 
 ---
 
-### [AUR Helper script](_pgs/iimur.md)
+### [AUR Helper script](/_pgs/iimur.md)
 
 2023-03-12 Sunday 15:01 03:01:50 PM
 
@@ -14,7 +14,7 @@ in [Arch Linux](https://archlinux.org). ...
 
 ---
 
-### [ydotool notes](_pgs/ydotool-notes.md)
+### [ydotool notes](/_pgs/ydotool-notes.md)
 
 2023-03-12 Sunday 15:03 03:03:03 PM
 
@@ -26,7 +26,7 @@ doing ydotool without sudo is not working any more ...
 
 ---
 
-### [yt-dlp notes](_pgs/ytdlp-notes.md)
+### [yt-dlp notes](/_pgs/ytdlp-notes.md)
 
 2023-03-12 Sunday 15:08 03:08:04 PM
 
@@ -38,7 +38,7 @@ I don't really care this and that. So, I created the following script. ...
 
 ---
 
-### [msh patches for dwl-0.4](_pgs/dwlmsh045-5pc.md)
+### [msh patches for dwl-0.4](/_pgs/dwlmsh045-5pc.md)
 
 2023-03-12 Sunday 16:07 04:07:17 PM
 
@@ -51,7 +51,7 @@ Combination of 5 following patches.
 
 ---
 
-### [zoom link redirection](_pgs/zoomredirect.md)
+### [zoom link redirection](/_pgs/zoomredirect.md)
 
 2023-03-12 Sunday 19:07 07:07:23 PM
 
@@ -60,7 +60,7 @@ It is annoying. To join a zoom meeting in browser, the zoom link need to be adju
 
 ---
 
-### [git push files](_pgs/gitpush.md)
+### [git push files](/_pgs/gitpush.md)
 
 2023-03-12 Sunday 19:09 07:09:19 PM
 
