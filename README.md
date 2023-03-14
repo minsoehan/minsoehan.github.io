@@ -1,4 +1,4 @@
-This is minsoehan's static website using GitHub Pages.
+This is minsoehan's static website using [GitHub Pages](https://pages.github.com).
 It hosts my personal notes, scripts, codes and any other resources.
 All things on this site are intended for just personal use. Therefore, please use them at your own risk.
 It is recommended to do your owned research and try to understand what you are doing first.
@@ -9,7 +9,8 @@ It is recommended to do your owned research and try to understand what you are d
 
 2023-03-12 Sunday 15:01 03:01:50 PM
 
-The dash script to search, download, install and update AUR package in Arch Linux. ...
+The dash script to search, download, install and update [AUR](https://aur.archlinux.org) package
+in [Arch Linux](https://archlinux.org). ...
 
 ---
 

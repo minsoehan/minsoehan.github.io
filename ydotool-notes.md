@@ -1,5 +1,26 @@
 # ydotool
 
+---
+
+### working update
+
+2023-03-14 Tuesday 09:50 09:50:27 AM
+
+After getting update of ydotool version 1.0.3-1
+```
+[2023-03-13T09:55:53+0630] [ALPM] upgraded ydotool (1.0.2-1 -> 1.0.3-1)
+```
+ydotool backed to work by enabling `ydotool.service` **user** service,
+adding `user` to `input` group and doing without `sudo`.
+```
+# gpasswd -a username input
+$ systemctl --user enable ydotool.service
+$ systemctl --user start ydotool.service
+$ ydotool type TESTING
+```
+
+---
+
 2023-03-12 Sunday 15:18 03:18:00 PM
 
 After getting update of ydotool version 1.0.2-1 in Arch Linux
@@ -23,7 +44,7 @@ $ systemctl --user start ydotool.service
 ```
 Otherwise `ydotoold` can not be started even though the `ydotool.service` *user* service was enabled and started.
 
-## Working
+### Working
 The way working at this moment is to start `ydotoold` by root permission by putting `sudo ydotoold` in the autostart file.
 Edit `/etc/sudoers` file using `visudo`, For example;
 ```

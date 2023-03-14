@@ -2,10 +2,10 @@
 
 2023-03-12 Sunday 15:19 03:19:03 PM
 
-Every Arch Linux user usually install AUR packages at some point.
+Every [Arch Linux](https://archlinux.org) user usually install [AUR](https://aur.archlinux.org) packages at some point.
 I also install 10-15 AUR packages in my Arch Linux system.
 But I am not an advanced user. I usually don't need to edit this and that.
-I just need to install and update AUR package. There are AUR Helpers out there.
+I just need to install and update AUR packages. There are AUR Helpers out there.
 But they are very advanced and complicated to me. So I wrote the following script for my personal use.
 It is a `dash` script and very fast. The following script can be cloned from my [mshii repository](https://github.com/minsoehan/mshii)
 and [the direct link to the script](https://github.com/minsoehan/mshii/blob/main/mur).
