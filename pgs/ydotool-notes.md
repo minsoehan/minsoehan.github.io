@@ -1,7 +1,5 @@
 # ydotool
 
----
-
 ### working update
 
 2023-03-14 Tuesday 09:50 09:50:27 AM
