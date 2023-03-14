@@ -14,6 +14,9 @@ adding `user` to `input` group and doing without `sudo`.
 # gpasswd -a username input
 $ systemctl --user enable ydotool.service
 $ systemctl --user start ydotool.service
+```
+Relogin or restart, then it works.
+```
 $ ydotool type TESTING
 ```
 
