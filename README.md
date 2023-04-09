@@ -5,6 +5,14 @@ It is recommended to do your owned research and try to understand what you are d
 
 ---
 
+### [Arch Linux Forum Experience Records](pgs/bbsarch.md)
+
+2023-04-09 Sunday 15:09 03:09:56 PM
+
+This is just records of my expriences in [Arch Linux Forum](https://bbs.archlinux.org/).
+
+---
+
 ### [AUR Helper script](pgs/iimur.md)
 
 2023-03-12 Sunday 15:01 03:01:50 PM
@@ -55,7 +63,7 @@ Combination of 5 following patches.
 
 2023-03-12 Sunday 19:07 07:07:23 PM
 
-If a zoom line is open in browser, it force to launch `zoom` application.
+If a zoom link is open in browser, it force to launch `zoom` application.
 It is annoying. To join a zoom meeting in browser, the zoom link need to be adjusted. For example, ...
 
 ---
