@@ -5,14 +5,6 @@ It is recommended to do your owned research and try to understand what you are d
 
 ---
 
-### [Arch Linux Forum Experience Records](pgs/bbsarch.md)
-
-2023-04-09 Sunday 15:09 03:09:56 PM
-
-This is just records of my expriences in [Arch Linux Forum](https://bbs.archlinux.org/).
-
----
-
 ### [AUR Helper script](pgs/iimur.md)
 
 2023-03-12 Sunday 15:01 03:01:50 PM
