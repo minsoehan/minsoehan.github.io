@@ -5,16 +5,6 @@ It is recommended to do your owned research and try to understand what you are d
 
 ---
 
-### [Difference between running a script "in terminal" and "from dmenu"](pgs/runing-script-from-dmenu.md)
-
-2023-04-12 Wednesday 12:07 12:07:35 PM
-
-Most linux users have their owned scripts in somewhere `$PATH` like in `~/.local/bin`.
-I have many too. Later, I became concerned if I run a script accidentally from `dmenu` or `bemenu`
-that I intend to run it in a terminal interactively. For example, lets say I have the following script in `$PATH`...
-
----
-
 ### [Arch Linux Forum Experience Records](pgs/bbsarch.md)
 
 2023-04-09 Sunday 15:09 03:09:56 PM
