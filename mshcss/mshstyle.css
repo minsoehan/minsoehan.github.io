@@ -1,0 +1,72 @@
+* {
+    box-sizing: border-box;
+}
+
+h1.mainheader {
+    text-shadow: 3px 3px 3px lightblue;
+}
+p.mainheader {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+hr.mainheader {
+    border-top: 3px solid cadetblue;
+    box-shadow: 1px 4px 3px lightblue;
+}
+p.subheader {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+hr.normal {
+    border-top: 1px solid lightblue;
+}
+
+body {
+    margin: auto;
+    width: 50%;
+    padding-left: 9px;
+    padding-right: 9px;
+}
+@media only screen and (max-width: 700px) {
+    body {
+        width: 100%;
+    }
+}
+
+.mm {
+    line-height: 1.8;
+}
+a {
+    text-decoration: none;
+}
+a:link, a:visited {
+    color: darkcyan;
+}
+a:hover {
+    color: green;
+}
+a:active {
+    color: lightgreen;
+}
+
+p.pdate {
+    margin-top: -18px;
+    font-size: smaller;
+    color: gray;
+}
+
+p.readmore {
+    font-size: small;
+    font-weight: bold;
+}
+
+.center {
+    text-align: center;
+}
+
+td.nowrap {
+    white-space: nowrap;
+}
+td.vtop {
+    vertical-align: top;
+}

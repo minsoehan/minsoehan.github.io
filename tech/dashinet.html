@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="Legal">Legal</a>&emsp;
+                <a href="Business">Business</a>&emsp;
+                <a href="Others">Others</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>dashinet</h2>
+            <p class="pdate">DATE 20240729</p>
+            <p>This is a single dash script to manage WiFi Connections. It can connect to new WiFi and can manage known connections such as activating, deactivating, deleting, checking password of a ever connected (known) connection.</p>
+            <pre><code>#!/bin/dash
+
+# test if it is running as ROOT and exit.
+if [ $(($(id -u))) -eq 0 ]; then
+    exit 0
+fi
+# test if it is running in terminal or exit.
+case "$(ps -o stat= -p $$)" in
+    *+*) echo "continue..." ;;
+    *) notify-send -t 2700 "clean exit" "please run it in terminal."; exit 0 ;;
+esac
+# test if it is already running or exit.
+SCRIPTNAME="$(basename -- $0)"
+if pidof -x "$SCRIPTNAME" -o $$ > /dev/null 2>&1; then
+    echo "the script is already running. clean exit."
+    exit 0
+fi
+# test if nmcli command is available or exit
+if ! which nmcli > /dev/null 2>&1; then
+    echo "nmcli command is NOT available. install NetworkManager first. clean exit."
+    exit 0
+fi
+##### pre testing ends here #####
+
+# correct number and select
+correcnumselected_func () {
+    echo; echo "$NUMWCLIST" | cut -d '_' -f 1,3-; echo
+    unset CORRECNUM
+    while true; do
+        read -p "[e:exit|q:quit] [b:back|r:reverse] [Number]: " SELNUM
+        case "$SELNUM" in
+            [0-9]|[0-9][0-9]) CORRECNUM=$(printf "%03d" "$SELNUM") ;;
+            [0-9][0-9][0-9]) CORRECNUM=$SELNUM ;;
+            e|exit|q|quit) exit 0 ;;
+            b|back|r|reverse) SKIPNEXT=1; GROUPLOOP=0; break ;;
+            *) echo "Oop! invalid selection. try again."; continue ;;
+        esac
+        SELECLINE=$(echo "$NUMWCLIST" | grep "^$CORRECNUM" | cut -d '_' -f 1,3-)
+        if [ -z "$SELECLINE" ]; then
+            echo "Oop! selection is empty. try again."
+            continue
+        fi
+        SELECTED=$(echo "$NUMWCLIST" | grep "^$CORRECNUM" | cut -d '_' -f 2)
+        break
+    done
+}
+
+########## AVAILABLE WIFI ##########
+# list available wifi
+listavailablewifi_func () {
+    local FIELDS="BSSID,SSID,BARS,SECURITY,IN-USE"
+    local WIFIRAW=$(nmcli --fields "$FIELDS" device wifi list | tail -n +2 | tr ' ' '_')
+    unset NUMWCLIST
+    local NUM=1
+    NUMWCLIST=$(for AVWIFI in $WIFIRAW; do
+        local ZLNUM=$(printf "%03d" "$NUM")
+        echo ""$ZLNUM"_"$AVWIFI""
+        local NUM=$((NUM+1))
+    done)
+}
+# connect selected wifi
+connectwifi_func () {
+
+    if [ $((SKIPNEXT)) -eq 1 ]; then
+        SKIPNEXT=0
+        return
+    fi
+
+    echo; echo "$SELECLINE"; echo
+
+    local FAILED=0
+    while true; do
+        echo "Type WiFi Password or Leave it Blank if NOT Required."
+        stty -echo; echo -n "Password or Blank: "; read WIFIPASS; stty echo; echo
+        if [ -z "$WIFIPASS" ]; then
+            nmcli device wifi connect "$SELECTED"
+        else
+            nmcli device wifi connect "$SELECTED" password "$WIFIPASS"
+        fi
+
+        if [ $(($?)) -eq 0 ]; then
+            break
+        fi
+
+        read -p "[A:again] [r:reselect] [s:stop] [e:exit]: " ARSE
+        case "$ARSE" in
+            r|res|reselect) GROUPLOOP=1; break ;;
+            s|stop) break ;;
+            e|exit) exit 0 ;;
+            *) continue ;;
+        esac
+    done
+}
+# list available wifi, correct number, select and connect selected wifi
+# wifi functions group loop
+wifigrouploop_func () {
+    nmcli device wifi rescan
+    while true; do
+        listavailablewifi_func
+        correcnumselected_func
+        connectwifi_func
+        if [ $((GROUPLOOP)) -eq 1 ]; then
+            GROUPLOOP=0
+            continue
+        fi
+        break
+    done
+}
+
+########## KNOWN CONNECTIONS ##########
+# list known connections
+listconnections_func () {
+    local FIELDS="UUID,NAME,TYPE,DEVICE"
+    local CONNRAW=$(nmcli --fields "$FIELDS" connection show | tail -n +2 | tr ' ' '_')
+    unset NUMWCLIST
+    local NUM=1
+    NUMWCLIST=$(for CONN in $CONNRAW; do
+        local ZLNUM=$(printf "%03d" "$NUM")
+        echo ""$ZLNUM"_"$CONN""
+        local NUM=$((NUM+1))
+    done)
+}
+# connection operations
+connectionoperations_func () {
+
+    if [ $((SKIPNEXT)) -eq 1 ]; then
+        SKIPNEXT=0
+        return
+    fi
+
+    GROUPLOOP=0
+
+    while true; do
+        echo "
+        a -> Activate
+        d -> Deactivate
+        r -> Remove/Delete
+        c -> Check Password
+        s -> Reselect Connection
+        b -> Restart
+        e -> Exit [or] q -> Quit
+        "
+        echo "selected:"; echo "$SELECLINE"; echo
+        read -p "Select Character: " SELCHAR
+        case "$SELCHAR" in
+            a) nmcli connection up "$SELECTED" ;;
+            d) nmcli connection down "$SELECTED" ;;
+            r) nmcli connection delete "$SELECTED"; GROUPLOOP=1 ;;
+            c) nmcli --show-secrets connection show "$SELECTED" | grep "security.psk:"; GROUPLOOP=1 ;;
+            s) echo "reslect connection..."; GROUPLOOP=1 ;;
+            b) echo "restart..." ;;
+            e|exit|q|quit) exit 0 ;;
+            *) echo "Oop! invalid selection. try again."; continue ;;
+        esac
+        break
+    done
+}
+# list known connections, correct number, select and do operations
+# connection functions group loop
+connectiongrouploop_func () {
+    while true; do
+        listconnections_func
+        correcnumselected_func
+        connectionoperations_func
+        if [ $((GROUPLOOP)) -eq 1 ]; then
+            continue
+        fi
+        break
+    done
+}
+
+# main while loop
+while true; do
+    echo "
+    w -> Available WiFi
+    c -> Known Connections
+    k -> Check Current Password
+    r -> Rescan WiFi
+    e -> Exit [or] q -> Quit
+    "
+    read -p "Select Character: " SELCHAR
+    case "$SELCHAR" in
+        w) wifigrouploop_func ;;
+        c) connectiongrouploop_func ;;
+        k) nmcli device wifi show-password ;;
+        r) nmcli device wifi rescan ;;
+        e|exit|q|quit) exit 0 ;;
+        *) echo "Oop! invalid selection. try again." ;;
+    esac
+    continue
+done
+            </code></pre>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>

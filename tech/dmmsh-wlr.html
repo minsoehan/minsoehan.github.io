@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="index.html">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="Legal">Legal</a>&emsp;
+                <a href="Business">Business</a>&emsp;
+                <a href="Others">Others</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2><a href="">dmmsh-wlr for managing outputs in Wayland using wlr-randr</a></h2>
+            <p class="pdate">DATE 20240729</p>
+            <p>Managing outputs in Wayland is smooth and easy by using wlr-randr while some compositors such as <a href="https://swaywm.org/">sway</a> and <a href="https://hyprland.org/">hyprland</a> have their own tools to manage outputs. See: <a href="https://man.archlinux.org/man/sway-output.5.en">sway-output(5) man page</a> and <a href="https://wiki.hyprland.org/Configuring/Monitors/">Monitors - Hyprland Wiki</a> respectively.</p>
+            <pre><code>#!/bin/dash
+
+# check if it is run as root and exit
+if [ $(($(id -u))) -eq 0 ]; then
+    exit 0
+fi
+# test if it is already running and exit
+SCRIPTNAME="$(basename -- $0)"
+if pidof -x "$SCRIPTNAME" -o $$ > /dev/null 2>&1; then
+    notify-send -t 2700 "clean exit" "the script is already running"
+    exit 0
+fi
+# chech if it is in terminal or exit
+isinterminal_func () {
+    case "$(ps -o stat= -p $$)" in
+        *+*) echo "in terminal, continue..." ;;
+        *) notify-send -t 2700 "clean exit" "please run it in terminal."; exit 0 ;;
+    esac
+}
+
+# simplest way to find built-in and extended monitors is
+# using wlr-randr, finding and setting manually
+# edit as required, use wlr-randr
+BUIMONI=eDP-1
+EXTMONI=HDMI-A-1
+# edit as required the path, it is usually /sys/class/drm
+MONIPATH=/sys/class/drm
+
+# check if extended monitor is found
+checkextmonifound_func () {
+    EXTMONIPATH=$(find $MONIPATH -name "*$EXTMONI*")
+    EXTMONISTAT=$(cat "$EXTMONIPATH"/status)
+    if [ "$EXTMONISTAT" = "disconnected" ]; then
+        notify-send -t 9000 ""$EXTMONI" not found" ""$EXTMONIPATH"/status says disconnected. clean exit."
+        exit 0
+    fi
+    EXTMONIMODES=$(cat "$EXTMONIPATH"/modes | sed 's/i$//')
+    if [ -z "$EXTMONIMODES" ]; then
+        notify-send -t 9000 "$EXTMONI not found" ""$EXTMONIPATH"/modes is empty. clean exit."
+        exit 0
+    fi
+}
+# finding built-in monitor's details
+buimonitordetails_func () {
+    local ALLDATA=$(wlr-randr --json | jq -r '.[] | select(.name == '\"$BUIMONI\"') |
+        (.modes[] | select(.current == true) | .width,.height),(.position | .x,.y)')
+    local NUM=1
+    for i in $ALLDATA; do
+        local VARNAME=$(echo "BUIMONIW BUIMONIH BUIMONIX BUIMONIY" | cut -d ' ' -f $NUM)
+        eval $VARNAME=$i
+        local NUM=$((NUM+1))
+    done
+    BUIMONIMODE="$BUIMONIW"x"$BUIMONIH"
+}
+# finding extended monitor's details
+extmonitordetails_func () {
+    local ALLDATA=$(wlr-randr --json | jq -r '.[] | select(.name == '\"$EXTMONI\"') |
+        (.modes[] | select(.current == true) | .width,.height),(.position | .x,.y)')
+    local NUM=1
+    for i in $ALLDATA; do
+        local VARNAME=$(echo "EXTMONIW EXTMONIH EXTMONIX EXTMONIY" | cut -d ' ' -f $NUM)
+        eval $VARNAME=$i
+        local NUM=$((NUM+1))
+    done
+    EXTMONIMODE="$EXTMONIW"x"$EXTMONIH"
+}
+# show current state (positions and resolutions)
+showcurrentstate_func () {
+    echo "
+    Monitor|--mode Resolution|--pos Position
+
+    "$BUIMONI"|--mode "$BUIMONIW"x"$BUIMONIH"|--pos "$BUIMONIX","$BUIMONIY"
+    "$EXTMONI"|--mode "$EXTMONIW"x"$EXTMONIH"|--pos "$EXTMONIX","$EXTMONIY"
+" | column -t -L -s '|'
+}
+selectextmonimode_func () {
+    # listing extended monitor's modes
+    local RAWMODES=$(echo "EXIT" && echo "$EXTMONIMODES" | awk '!x[$0]++' | head -n 9)
+    local NUM=0
+    NUMEXTMONIMODES=$(for i in $RAWMODES; do
+        echo "    "$NUM". $i"
+        local NUM=$((NUM+1))
+    done)
+    # selecting extended monitor's mode
+    echo "available resolutions modes of "$EXTMONI" are;"
+    echo; echo "$NUMEXTMONIMODES"; echo
+    while true; do
+        unset EXTMONIMODE EXTMONIW EXTMONIH SELNUM
+        read -p "Select Number of Mode: " SELNUM
+        EXTMONIMODE=$(echo "$NUMEXTMONIMODES" | grep "^\s\+"$SELNUM"\." | cut -d ' ' -f 6)
+        if [ "$EXTMONIMODE" = "EXIT" ];then
+            exit 0
+        fi
+        if [ -z "$EXTMONIMODE" ]; then
+            echo "Oop! invalid selection. select again."
+            continue
+        fi
+        if [ -n "$EXTMONIMODE" ]; then
+            break
+        fi
+    done
+    EXTMONIW=$(echo "$EXTMONIMODE" | cut -d 'x' -f 1)
+    EXTMONIH=$(echo "$EXTMONIMODE" | cut -d 'x' -f 2)
+}
+# select side
+selectmoniside_func () {
+    echo "
+    0. EXIT
+    1. Left
+    2. Right
+    3. Up
+    4. Down
+    "
+    while true; do
+        echo "Select position of "$EXTMONI" as which side of "$BUIMONI"."
+        read -p "Select Number: " ELR
+        case $ELR in
+            0) exit 0 ;;
+            1) set -- "left"; break ;;
+            2) set -- "right"; break ;;
+            3) set -- "up"; break ;;
+            4) set -- "down"; break ;;
+            *) echo "invalid selection. just type 0, 1, 2, 3 or 4."; continue ;;
+        esac
+    done
+    managemoniside_func "$1" >/dev/null 2>&1
+}
+# manage  monitor sides
+managemoniside_func () {
+    case "$1" in
+        left|-l)
+            wlr-randr --output "$BUIMONI" --mode "$BUIMONIMODE" --pos "$EXTMONIW",0
+            wlr-randr --output "$EXTMONI" --mode "$EXTMONIMODE" --pos 0,0
+            ;;
+        right|-r)
+            wlr-randr --output "$BUIMONI" --mode "$BUIMONIMODE" --pos 0,0
+            wlr-randr --output "$EXTMONI" --mode "$EXTMONIMODE" --pos "$BUIMONIW",0
+            ;;
+        up|-u)
+            wlr-randr --output "$BUIMONI" --mode "$BUIMONIMODE" --pos 0,"$EXTMONIH"
+            wlr-randr --output "$EXTMONI" --mode "$EXTMONIMODE" --pos 0,0
+            ;;
+        down|-d)
+            wlr-randr --output "$BUIMONI" --mode "$BUIMONIMODE" --pos 0,0
+            wlr-randr --output "$EXTMONI" --mode "$EXTMONIMODE" --pos 0,"$BUIMONIH"
+            ;;
+        *)
+            exit 0
+            ;;
+    esac
+    exit 0
+}
+# toggle horizontal and vertical sides
+togglehorizontalside_func () {
+    if [ $((EXTMONIX)) -eq 0 ] && [ $((BUIMONIX)) -eq 0 ]; then
+        managemoniside_func left >/dev/null 2>&1
+    fi
+    if [ $((EXTMONIX)) -gt 0 ]; then
+        managemoniside_func left >/dev/null 2>&1
+    fi
+    if [ $((EXTMONIX)) -le 0 ]; then
+        managemoniside_func right >/dev/null 2>&1
+    fi
+}
+toggleverticalside_func () {
+    if [ $((EXTMONIY)) -eq 0 ] && [ $((BUIMONIY)) -eq 0 ]; then
+        managemoniside_func up >/dev/null 2>&1
+    fi
+    if [ $((EXTMONIY)) -gt 0 ]; then
+        managemoniside_func up >/dev/null 2>&1
+    fi
+    if [ $((EXTMONIY)) -le 0 ]; then
+        managemoniside_func down >/dev/null 2>&1
+    fi
+}
+outputtoggle_func () {
+    echo "
+    00. Exit
+    68. "$BUIMONI" output toggle
+    43. "$EXTMONI" output toggle
+    "
+    read -p "Select Number: " SELNUM
+    case "$SELNUM" in
+        00) exit 0 ;;
+        68) wlr-randr --output "$BUIMONI" --toggle ;;
+        43) wlr-randr --output "$EXTMONI" --toggle ;;
+        *) exit 0 ;;
+    esac
+}
+
+# main & run pre required functions
+if [ -z "$1" ] || [ "$1" = "check" ] || [ "$1" = "-c" ]; then
+    isinterminal_func
+fi
+checkextmonifound_func
+buimonitordetails_func
+extmonitordetails_func
+case "$1" in
+    left|-l)
+        managemoniside_func left >/dev/null 2>&1
+        ;;
+    right|-r)
+        managemoniside_func right >/dev/null 2>&1
+        ;;
+    up|-u)
+        managemoniside_func up >/dev/null 2>&1
+        ;;
+    down|-d)
+        managemoniside_func down >/dev/null 2>&1
+        ;;
+    horizontal|-h)
+        togglehorizontalside_func
+        ;;
+    vertical|-v)
+        toggleverticalside_func
+        ;;
+    check|-c)
+        showcurrentstate_func
+        ;;
+    outputtoggle|opt|-t)
+        outputtoggle_func
+        ;;
+    "")
+        showcurrentstate_func
+        selectextmonimode_func
+        selectmoniside_func
+        ;;
+    *)
+        exit 0
+        ;;
+esac
+                </code></pre>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>
