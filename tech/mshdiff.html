@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="../legal">Legal</a>&emsp;
+                <a href="../business">Business</a>&emsp;
+                <a href="../else">Else</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>mshdiff</h2>
+            <p class="pdate">DATE 20240729</p>
+            <p>If you need to compare files between two directories and generate a patch file, the following script can help you achieve this efficiently. This guide will explain the script's functionality and how to use it.</p>
+            <h3>The Script</h3>
+            <p>Here’s the shell script designed to compare files between two directories and create a patch file (filename.diff):</p>
+            <pre><code>#!/bin/dash
+
+# test if it is running as root and exit
+if [ $(($(id -u))) -eq 0 ]; then
+    exit 0
+fi
+# check if it is in terminal
+case "$(ps -o stat= -p $$)" in
+    *+*) echo "continue..." ;;
+    *) notify-send -t 2700 "clean exit" "please run it in terminal."; exit 0 ;;
+esac
+# test if it is already running and exit
+SCRIPTNAME="$(basename "$(readlink -f "$0")")"
+if pidof -x "$SCRIPTNAME" -o $$ >/dev/null 2>&1; then
+    echo "the script is already running."; exit 0
+fi
+
+cd "$PWD"
+
+if ls . | grep "$3" >/dev/null 2>&1; then
+    echo "Oop! output file already exists. check first."; exit 0
+fi
+if ls "$1" | grep [[:space:]] >/dev/null 2>&1; then
+    echo "filename includes space in the folder "$1". correct it first."; exit 0
+else
+    AFILES=$(ls "$1" | sort)
+fi
+if ls "$1" | grep [[:space:]] >/dev/null 2>&1; then
+    echo "filename includes space in the folder "$1". correct it first."; exit 0
+else
+    BFILES=$(ls "$2" | sort)
+fi
+
+for i in $AFILES; do
+    if echo "$BFILES" | grep -w "$i" >/dev/null 2>&1; then
+        diff -u "$1"/"$i" "$2"/"$i" >> "$3".diff
+    else
+        # diff -u "$1"/"$i" /dev/null >> "$3".diff
+        echo "WARNING: "$1"/"$i" is not in "$2" folder"
+    fi
+done
+for ii in $BFILES; do
+    if ! echo "$AFILES" | grep -w "$ii" >/dev/null 2>&1; then
+        diff -u /dev/null "$2"/"$ii" >> "$3".diff
+    fi
+done
+            </code></pre>
+            <h3>How the Script Works</h3>
+            <ol>
+                <li><b>Root Check</b>: The script first checks if it’s running as the root user and exits if true, as it should not run with root privileges.</li>
+                <li><b>Terminal Check</b>: It ensures the script is being run in a terminal. If not, it sends a notification and exits.</li>
+                <li><b>Script Uniqueness Check</b>: It verifies that another instance of the script is not already running.</li>
+                <li><b>Output File Check</b>: The script checks if the output file already exists in the current directory to prevent overwriting.</li>
+                <li><b>Whitespace Check</b>: It checks for filenames containing spaces in the specified directories and exits if any are found.</li>
+                <li><b>File Listing</b>: It lists and sorts files from both directories for comparison.</li>
+                <li><b>File Comparison</b>: Using the diff command, it compares files from both directories:<ul><li>If a file is present in both directories, it generates a unified diff.</li><li>If a file is only present in the first directory, it warns the user.</li><li>If a file is only present in the second directory, it generates a diff against /dev/null.</li></ul></li>
+            </ol>
+            <h3>Using the Script</h3>
+            <ol>
+                <li><b>Save the Script</b>: Save the script to a file, for example, <code>generate_patch.sh</code>.</li>
+                <li><b>Make It Executable</b>: Run <code>chmod +x generate_patch.sh</code> to make the script executable.</li>
+                <li><b>Run the Script</b>: Execute the script with three arguments: the two directories to compare and the desired name for the output diff file.<pre><code>[user@hostname ~]$ ./generate_patch.sh dir1 dir2 output_filename</code></pre></li>
+            </ol>
+            <h3>Example Usage</h3>
+            <p>Assume you have two directories, <code>old_version</code> and <code>new_version</code>, containing the files you want to compare. To generate a patch file named <code>update.diff</code>, run:</p>
+            <pre><code>[user@hostname ~]$ ./generate_patch.sh old_version new_version update</code></pre>
+            <p>In conclusion, this script is a useful tool for generating patch files by comparing files in two directories. By following the steps above, you can easily create patch files to track changes between different versions of your files.</p>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>
