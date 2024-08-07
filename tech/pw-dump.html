@@ -42,7 +42,7 @@ PipeWire:Interface:Client
 ...
             </code></pre>
             <p>To remove the leading <code>PipeWire:Interface:</code>, sort and filter unique, see the following example. The Node is important among the pipewire interface names.</p>
-            <pre class="nohlcmd"><code class="no-highlight">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type' | cut -d ':' -f 3 | sort | uniq
+            <pre><code class="no-highlight nohlcmd">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type' | cut -d ':' -f 3 | sort | uniq
 Client
 Core
 Device
