@@ -80,6 +80,6 @@ td.vtop {
     overflow-x: auto;
 }
 
-table {
+table.fullwidth {
     width: 100%;
 }
