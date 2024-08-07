@@ -72,7 +72,7 @@ td.nowrap {
 td.vtop {
     vertical-align: top;
 }
-pre.nohl {
+pre.nohlcmd {
     background-color: #222222;
     color: #CCCCCC;
     padding: 6px;
