@@ -27,7 +27,7 @@
             <p>The pw-dump program produces a representation of the current PipeWire state as JSON, including the information on nodes, devices, modules, ports, and other objects.</p>
             <p>The output of pw-dump is in JSON format and it can be extract required infomation by using jq command. As the output is so complicated, the following suggestion will be useful.</p>
             <p>In the output, type is important. The format of type is <code>"type": "PipeWire:Interface:Note"</code>. To see all the type, see the following example.</p>
-            <pre class="nohlcmd"><code class="no-highlight">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type'
+            <pre class="nohlcmd"><code class="nohlcmd">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type'
 PipeWire:Interface:Core
 PipeWire:Interface:Module
 PipeWire:Interface:Profiler
@@ -42,7 +42,7 @@ PipeWire:Interface:Client
 ...
             </code></pre>
             <p>To remove the leading <code>PipeWire:Interface:</code>, sort and filter unique, see the following example. The Node is important among the pipewire interface names.</p>
-            <pre><code class="no-highlight nohlcmd">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type' | cut -d ':' -f 3 | sort | uniq
+            <pre class="nohlcmd"><code class="nohlcmd">[user@hostname ~]$ pw-dump | jq -r '.[] | . | .type' | cut -d ':' -f 3 | sort | uniq
 Client
 Core
 Device

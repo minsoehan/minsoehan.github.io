@@ -76,5 +76,6 @@ td.vtop {
     background-color: #222222;
     color: #CCCCCC;
     padding: 6px;
+    display: block;
     overflow-x: auto;
 }
