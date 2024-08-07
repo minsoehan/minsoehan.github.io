@@ -79,3 +79,7 @@ td.vtop {
     display: block;
     overflow-x: auto;
 }
+
+table {
+    width: 100%;
+}
