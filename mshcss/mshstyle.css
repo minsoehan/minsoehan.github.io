@@ -82,4 +82,5 @@ td.vtop {
 
 table.fullwidth {
     width: 100%;
+    table-layout: fixed;
 }
