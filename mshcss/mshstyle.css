@@ -33,6 +33,10 @@ body {
         padding-left: 9px;
         padding-right: 12px;
     }
+    table.fullwidth {
+        width: 100%;
+        table-layout: fixed;
+    }
 }
 
 .mm {
