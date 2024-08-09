@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <!-- msh removed syntax highlight
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+        -->
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="../legal">Legal</a>&emsp;
+                <a href="../business">Business</a>&emsp;
+                <a href="../else">Else</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>Installing Arch Linux</h2>
+            <p class="pdate">DATE 20240807</p>
+            <p>Arch linux installation is not that hard if you do it simple as if:</p>
+            <ul>
+                <li>you don't need dual boot and just want to install it as first OS on your drive.</li>
+                <li>your computer is not too old and it supports <a href="https://wiki.archlinux.org/title/Partitioning#GUID_Partition_Table">GPT</a>, <a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface">UEFI</a>, etc.</li>
+                <li>you don't need <a href="https://wiki.archlinux.org/title/LVM">LVM</a>, system encryption or <a href="https://wiki.archlinux.org/title/RAID">RAID</a>.</li>
+                <li>you don't mind to read the wiki pages.</li>
+            </ul>
+            <p>If so, it is done in 10 minutes (without downloading and installation time). In this tutorial, The Arch Linux is installed as</p>
+            <ul>
+                <li>no dual boot, single OS</li>
+                <li>using <a href="https://wiki.archlinux.org/title/Partitioning#GUID_Partition_Table">GUID Partition Table</a> (GPT) and <a href="https://wiki.archlinux.org/title/Ext4">EXT4</a> filesystem. Assuming storage device is <code>/dev/sda</code>, partition table is as follows:
+                    <ul style="list-style: none;">
+                        <li>
+                            <table>
+                                <tr><td><code>/dev/sda1</code>&nbsp;&nbsp;</td><td>BOOT Partition and to be mounted to <code>/boot</code>.</td></tr>
+                                <tr><td><code>/dev/sda2</code>&nbsp;&nbsp;</td><td>ROOT Partition and to be mounted to <code>/</code>.</td></tr>
+                                <tr><td><code>/dev/sda3</code>&nbsp;&nbsp;</td><td>SWAP Partition and no need to be mounted to.</td></tr>
+                                <tr><td><code>/dev/sda4</code>&nbsp;&nbsp;</td><td>HOME Partition and to be mounted to <code>/home</code>.</td></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </li>
+                <li>With <a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface">Unified Extensible Firmware Interface</a> (UEFI) using <a href="https://wiki.archlinux.org/title/Systemd-boot">systemd-boot</a> as <a href="https://wiki.archlinux.org/title/Arch_boot_process">bootloader</a></li>
+                <li>keep it simple and stupid</li>
+            </ul>
+            <h3>Preparing Installation Media</h3>
+            <pre class="nohlcmd"><code># dd if=/path/to/archlinux-version-x86_64.iso of=/dev/sdb</code></pre>
+            <h3>Boot up from the Installation Media</h3>
+            <p>Getting the installation media booted up, choosing UEFI in boot menu if needed. How to get the installation booted up?</p>
+            <h3>Connect to Internet</h3>
+            <p>To connect to internet (WiFi) using <a href="https://wiki.archlinux.org/title/Iwd">iwd</a></p>
+            <pre class="nohlcmd"><code># iwctl</code></pre>
+            <p>for more deatils, see: <a href="https://wiki.archlinux.org/title/Iwd#Connect_to_a_network">Connect to a network</a></p>
+            <h3>Partitioning and Formatting Partitions</h3>
+            <h4>Partitioning</h4>
+            <p>GPT fdisk is personally recommended for partitioning the disk. GPT fdisk— consisting of the <code>gdisk</code>, <code>cgdisk</code>, <code>sgdisk</code> and <code>fixparts</code> programs—is a set of text-mode partitioning tools. Assuming your device is <code>/dev/sda</code>, run the following command and follow on-screen instructions.</p>
+            <pre class="nohlcmd"><code># gdisk /dev/sda</code></pre>
+            <h4>Formatting Partitions</h4>
+            <p>Partitioning the disk by gdisk is just creating partition table on the disk. Formatting is still needed. In other words, formatting is writing <a href="https://wiki.archlinux.org/title/File_systems">filesystem</a> on the partition. In this tutorial, <a href="https://wiki.archlinux.org/title/Ext4">EXT4 Filesystem</a> is used for all partition except <code>/boot</code> partition where bootlader's files will reside and which is created as <a href="https://wiki.archlinux.org/title/EFI_system_partition">EFI System Partition</a>.</p>
+            <h4>Example of Partitioning and Formatting</h4>
+            <ul style="list-style: none;">
+                <li><b>BOOT Partition</b> <code>/dev/sda1</code><br>
+                    <code>500MB</code> or <code>1GB</code> is recommended.<br>
+                    Partition Type <code>ef00</code><br>
+                    Mounted to <code>/boot</code><br>
+                    Formatted as <code>FAT32</code> filesystem
+                    <pre class="nohlcmd"><code># mkfs.fat -F32 /dev/sda1</code></pre>
+                </li>
+                <li><b>ROOT Partition</b> <code>/dev/sda2</code><br>
+                    <code>30GB</code> is recommended.<br>
+                    Partition Type <code>8300</code><br>
+                    Mounted to <code>/</code><br>
+                    Formatted as <code>EXT4</code> filesystem
+                    <pre class="nohlcmd"><code># mkfs.ext4 /dev/sda2</code></pre>
+                </li>
+                <li><b>SWAP Partition</b> <code>/dev/sda3</code><br>
+                    <code>8GB</code> is recommended.<br>
+                    Partition Type <code>8200</code><br>
+                    No need to format and mount<br>
+                    But make it <code>swap</code> partition
+                    <pre class="nohlcmd"><code># mkswap /dev/sda3</code></pre>
+                </li>
+                <li><b>HOME Partition</b> <code>/dev/sda4</code><br>
+                    Size depends on available space on the disk <code>/dev/sda</code><br>
+                    Partition Type <code>8300</code><br>
+                    Mounted to <code>/home</code><br>
+                    Formatted as <code>EXT4</code> filesystem
+                    <pre class="nohlcmd"><code># mkfs.ext4 /dev/sda4</code></pre>
+                </li>
+            </ul>
+            <h3>Mounting and Activating Swap</h3>
+            <p>Mounting involves creating directories where the partitions will be mounted. Activating <code>swap</code> can be done by using <code>swapon</code> command.</p>
+            <ol>
+                <li>Mount ROOT partition to <code>/mnt</code>.</li>
+                <li>Create directories where the next partitions will be mounted.
+                    <ul>
+                        <li><code>/mnt/boot</code> for BOOT Partition</li>
+                        <li><code>/mnt/home</code> for HOME Partition</li>
+                    </ul>
+                </li>
+                <li>Mount BOOT and HOME partitions to <code>/mnt/boot</code> and <code>/mnt/home</code>.</li>
+                <li>Activate SWAP partition using <code>swapon</code>.</li>
+            </ol>
+            <pre class="nohlcmd"><code># mount /dev/sda2 /mnt
+# mkdir /mnt/boot                
+# mkdir /mnt/home                
+# mount /dev/sda1 /mnt/boot                
+# mount /dev/sda4/mnt/home
+# swapon /dev/sda3</code></pre>
+            <h3>Installing Base System</h3>
+            <p>At this stage, base system can be installed. It is also recommended to install other useful packages such as <code>base-devel</code>, <code>nano</code>, <code>nvim</code>, <code>networkmanager</code>.</p>
+            <pre class="nohlcmd"><code># pacstrap /mnt base linux linux-firmware base-devel nvim networkmanager</code></pre>
+            <h3>Configuration</h3>
+            <h4 style="margin-bottom: -9px;">fstab</h4>
+            <pre class="nohlcmd"><code># genfstab -U /mnt >> /mnt/etc/fstab</code></pre>
+            <h4 style="margin-bottom: -9px;">chroot</h4>
+            <pre class="nohlcmd"><code># arch-chroot /mnt</code></pre>
+            <h4 style="margin-bottom: -9px;">Timezone</h4>
+            <pre class="nohlcmd"><code># ln -sf /usr/share/zoneinfo/Asia/Yangon /etc/localtime<br># hwclock --systohc</code></pre>
+            <h4 style="margin-bottom: -9px;">Uncomment Locale</h4>
+            <pre class="nohlcmd"><code># nano /etc/locale.gen</code></pre>
+            <p style="margin-top: -9px;">Uncomment <code>en_US.UTF-8 UTF-8</code>. If <code>nano</code> is not available, run <code>pacman -S nano</code> to install it first.</p>
+            <h4 style="margin-bottom: -9px;">Generate Locale</h4>
+            <pre class="nohlcmd"><code># locale-gen</code></pre>
+            <h4 style="margin-bottom: -9px;">Create Locale File</h4>
+            <pre class="nohlcmd"><code># nano /etc/locale.conf<hr>LANG=en_US.UTF-8 UTF-8</code></pre>
+            <h4 style="margin-bottom: -9px;">Hostname</h4>
+            <pre class="nohlcmd"><code># nano /etc/hostname</code><hr><i>myhostname</i></pre>
+            <h4 style="margin-bottom: -9px;">Hosts</h4>
+            <pre class="nohlcmd"><code>#nano /etc/hosts<hr>127.0.0.1  localhost<br>::1  localhost<br>127.0.1.1  <i>myhostname.localdomain  myhostname</i></code></pre>
+            <h4 style="margin-bottom: -9px;">Root Password</h4>
+            <pre class="nohlcmd"><code># passwd</code></pre>
+            <h4 style="margin-bottom: -9px;">Create New User</h4>
+            <pre class="nohlcmd"><code># useradd -m -G wheel -s /bin/bash myusername<br># passwd myusername</code></pre>
+            <h4 style="margin-bottom: -9px;">Make User Sudoer</h4>
+            <pre class="nohlcmd"><code># EDITOR=nano visudo<hr>uncomment the following line<br>%wheel ALL=(ALL) ALL</code></pre>
+            <!-- Bootloader -->
+            <h3>Bootloader</h3>
+            <h4 style="margin-bottom: -9px;">Bootloader Installation</h4>
+            <p style="margin-bottom: -9px; margin-top: 12px;">See: <a href="https://wiki.archlinux.org/title/Systemd-boot">Systemd-boot</a> for more details. Below command would be working only if <a href="https://wiki.archlinux.org/title/EFI_system_partition">EFI System Partition (ESP)</a> is mounted to <code>/boot</code> or <code>/efi</code>. Mounting ESP to <code>/boot</code> is the most recommended and simplest. Read <a href="https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points">ESP Typical Mount Points</a> for more knowledge.</p>
+            <pre class="nohlcmd"><code># bootctl install</code></pre>
+            <p style="margin-top: -9px;">When running <code>bootctl install</code>, systemd-boot will try to locate the ESP at <code>/efi</code>, <code>/boot</code>, and <code>/boot/efi</code>. Setting esp to a different location requires passing the <code>--esp-path=esp option</code>.</p>
+            <h4 style="margin-bottom: -9px;">Bootloader Entry File</h4>
+            <pre class="nohlcmd"><code># nano /boot/loader/entries/arch.conf</code><hr>title    Arch Linux<br>linux    /vmlinuz-linux<br>initrd   /initramfs-linux.img<br>options  root=/dev/sda2 rw</pre>
+            <h4 style="margin-bottom: -9px;">Exit, Unmount and Reboot</h4>
+            <pre class="nohlcmd"><code># exit<br># umount -R /mnt<br># reboot</code></pre>
+            <h4 style="margin-bottom: -9px;">Post Installation</h4>
+            <p style="margin-top: 12px;">At this stage, the base installation finished. See <a href="https://wiki.archlinux.org/title/General_recommendations">General recommendations</a> for system management directions and post-installation tutorials (like creating unprivileged user accounts, setting up a graphical user interface, sound or a touchpad). For a list of applications that may be of interest, see <a>List of applications</a>.</p>
+            
+
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>
