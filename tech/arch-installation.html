@@ -118,41 +118,44 @@
             <h3>Installing Base System</h3>
             <p>At this stage, base system can be installed. It is also recommended to install other useful packages such as <code>base-devel</code>, <code>nano</code>, <code>nvim</code>, <code>networkmanager</code>.</p>
             <pre class="nohlcmd"><code># pacstrap /mnt base linux linux-firmware base-devel nvim networkmanager</code></pre>
+            
+            <!-- Configuration -->
             <h3>Configuration</h3>
-            <h4 style="margin-bottom: -9px;">fstab</h4>
+            <h4>fstab</h4>
             <pre class="nohlcmd"><code># genfstab -U /mnt >> /mnt/etc/fstab</code></pre>
-            <h4 style="margin-bottom: -9px;">chroot</h4>
+            <h4>chroot</h4>
             <pre class="nohlcmd"><code># arch-chroot /mnt</code></pre>
-            <h4 style="margin-bottom: -9px;">Timezone</h4>
+            <h4>Timezone</h4>
             <pre class="nohlcmd"><code># ln -sf /usr/share/zoneinfo/Asia/Yangon /etc/localtime<br># hwclock --systohc</code></pre>
-            <h4 style="margin-bottom: -9px;">Uncomment Locale</h4>
+            <h4>Uncomment Locale</h4>
             <pre class="nohlcmd"><code># nano /etc/locale.gen</code></pre>
-            <p style="margin-top: -9px;">Uncomment <code>en_US.UTF-8 UTF-8</code>. If <code>nano</code> is not available, run <code>pacman -S nano</code> to install it first.</p>
-            <h4 style="margin-bottom: -9px;">Generate Locale</h4>
+            <p>Uncomment <code>en_US.UTF-8 UTF-8</code>. If <code>nano</code> is not available, run <code>pacman -S nano</code> to install it first.</p>
+            <h4>Generate Locale</h4>
             <pre class="nohlcmd"><code># locale-gen</code></pre>
-            <h4 style="margin-bottom: -9px;">Create Locale File</h4>
+            <h4>Create Locale File</h4>
             <pre class="nohlcmd"><code># nano /etc/locale.conf<hr>LANG=en_US.UTF-8 UTF-8</code></pre>
-            <h4 style="margin-bottom: -9px;">Hostname</h4>
+            <h4>Hostname</h4>
             <pre class="nohlcmd"><code># nano /etc/hostname</code><hr><i>myhostname</i></pre>
-            <h4 style="margin-bottom: -9px;">Hosts</h4>
-            <pre class="nohlcmd"><code>#nano /etc/hosts<hr>127.0.0.1  localhost<br>::1  localhost<br>127.0.1.1  <i>myhostname.localdomain  myhostname</i></code></pre>
-            <h4 style="margin-bottom: -9px;">Root Password</h4>
+            <h4>Hosts</h4>
+            <pre class="nohlcmd"><code>#nano /etc/hosts<hr>127.0.0.1  localhost<br>::1        localhost<br>127.0.1.1  <i>myhostname.localdomain  myhostname</i></code></pre>
+            <h4>Root Password</h4>
             <pre class="nohlcmd"><code># passwd</code></pre>
-            <h4 style="margin-bottom: -9px;">Create New User</h4>
+            <h4>Create New User</h4>
             <pre class="nohlcmd"><code># useradd -m -G wheel -s /bin/bash myusername<br># passwd myusername</code></pre>
-            <h4 style="margin-bottom: -9px;">Make User Sudoer</h4>
+            <h4>Make User Sudoer</h4>
             <pre class="nohlcmd"><code># EDITOR=nano visudo<hr>uncomment the following line<br>%wheel ALL=(ALL) ALL</code></pre>
+            
             <!-- Bootloader -->
             <h3>Bootloader</h3>
-            <h4 style="margin-bottom: -9px;">Bootloader Installation</h4>
-            <p style="margin-bottom: -9px; margin-top: 12px;">See: <a href="https://wiki.archlinux.org/title/Systemd-boot">Systemd-boot</a> for more details. Below command would be working only if <a href="https://wiki.archlinux.org/title/EFI_system_partition">EFI System Partition (ESP)</a> is mounted to <code>/boot</code> or <code>/efi</code>. Mounting ESP to <code>/boot</code> is the most recommended and simplest. Read <a href="https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points">ESP Typical Mount Points</a> for more knowledge.</p>
+            <h4>Bootloader Installation</h4>
+            <p style="margin-top: 12px;">See: <a href="https://wiki.archlinux.org/title/Systemd-boot">Systemd-boot</a> for more details. Below command would be working only if <a href="https://wiki.archlinux.org/title/EFI_system_partition">EFI System Partition (ESP)</a> is mounted to <code>/boot</code> or <code>/efi</code>. Mounting ESP to <code>/boot</code> is the most recommended and simplest. Read <a href="https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points">ESP Typical Mount Points</a> for more knowledge.</p>
             <pre class="nohlcmd"><code># bootctl install</code></pre>
-            <p style="margin-top: -9px;">When running <code>bootctl install</code>, systemd-boot will try to locate the ESP at <code>/efi</code>, <code>/boot</code>, and <code>/boot/efi</code>. Setting esp to a different location requires passing the <code>--esp-path=esp option</code>.</p>
-            <h4 style="margin-bottom: -9px;">Bootloader Entry File</h4>
+            <p>When running <code>bootctl install</code>, systemd-boot will try to locate the ESP at <code>/efi</code>, <code>/boot</code>, and <code>/boot/efi</code>. Setting esp to a different location requires passing the <code>--esp-path=esp option</code>.</p>
+            <h4>Bootloader Entry File</h4>
             <pre class="nohlcmd"><code># nano /boot/loader/entries/arch.conf</code><hr>title    Arch Linux<br>linux    /vmlinuz-linux<br>initrd   /initramfs-linux.img<br>options  root=/dev/sda2 rw</pre>
-            <h4 style="margin-bottom: -9px;">Exit, Unmount and Reboot</h4>
+            <h4>Exit, Unmount and Reboot</h4>
             <pre class="nohlcmd"><code># exit<br># umount -R /mnt<br># reboot</code></pre>
-            <h4 style="margin-bottom: -9px;">Post Installation</h4>
+            <h3>Post Installation</h3>
             <p style="margin-top: 12px;">At this stage, the base installation finished. See <a href="https://wiki.archlinux.org/title/General_recommendations">General recommendations</a> for system management directions and post-installation tutorials (like creating unprivileged user accounts, setting up a graphical user interface, sound or a touchpad). For a list of applications that may be of interest, see <a>List of applications</a>.</p>
             
 
