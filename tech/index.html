@@ -22,6 +22,13 @@
             <hr class="normal">
         </header>
         <div>
+            <h2><a href="noauto.html">Mount/Unmount mountpoint that has user,noauto options in /etc/fstab</a></h2>
+            <p class="pdate">DATE 20240817</p>
+            <p>Mounting data partition to a mountpoint outside directory structure in <code>/etc/fstab</code> is a bit complicated. By default, the partitions are auto mounted to their mountpoints respectively at boot. But the problem is that, the owner of the mountpoint would be <code>root</code> and being without write permission for normal user because mount command was executed by root. On the other hand, the line in <code>/etc/fstab</code> that has <code>user,noauto</code> options is not auto mounted at boot. It can be mounted later as normal user by just running the following.</p>
+            <p class="readmore"><a href="noauto.html">READ MORE</a></p>
+            <hr class="normal">
+        </div>
+        <div>
             <h2><a href="arch-installation.html">Installing Arch Linux</a></h2>
             <p class="pdate">DATE 20240807</p>
             <p>Arch linux installation is not that hard if you do it simple as if:</p>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="../legal">Legal</a>&emsp;
+                <a href="../business">Business</a>&emsp;
+                <a href="../else">Else</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>Mount/Unmount mountpoint that has user,noauto options in /etc/fstab</h2>
+            <h2>noauto</h2>
+            <p class="pdate">DATE 20240817</p>
+            <p>Mounting data partition to a mountpoint outside directory structure in <code>/etc/fstab</code> is a bit complicated. By default, the partitions are auto mounted to their mountpoints respectively at boot. But the problem is that, the owner of the mountpoint would be <code>root</code> and being without write permission for normal user because <code>mount</code> command was executed by <code>root</code>. On the other hand, the line in <code>/etc/fstab</code> that has <code>user,noauto</code> options is not auto mounted at boot. It can be mounted later as normal user by just running the following.</p>
+            <pre class="nohlcmd"><code class="nohighlight">~$ mount ~/Extra-Data-Partition</code></pre>
+            <p>But if the above mount command has any option, it would not work asking superuser permission.</p>
+            <pre class="nohlcmd"><code class="nohighlight">user@hostname ~]$ mount --mkdir --onlyonce ~/Extra-Data-Partition
+mount: /home/user/Extra-Data-Partition: must be superuser to use mount.
+        dmesg(1) may have more information after failed mount system call.
+[user@hostname ~]$</code></pre>
+            <p>In case of many extra data partitions being supposed to be mounted to mountpoints outside directory structure, it would be hard to manage if you care about if the mountpoint is already mounted or not, or the mountpoint directory exists or not. For that matter, I wrote a <code>dash</code> script.</p>
+            <h3>The Script</h3>
+            <p>Here’s the <code>dash</code> shell script designed to automate <b>mount</b>, <b>unmount</b> and <b>toggle</b>.</p>
+            <pre><code>#!/bin/dash
+
+# check if run as root and exit
+if [ $(($(id -u))) -eq 0 ]; then
+    exit 0
+fi
+# check if it is already running and exit
+SCRIPTNAME="$(basename -- $0)"
+if pidof -x "$SCRIPTNAME" -o $$ >/dev/null 2>&1; then
+    echo "the script is already running. clean exit."
+    exit 0
+fi
+
+NOAUTOMP=$(awk '/^UUID.*noauto/ {print $2}' /etc/fstab)
+if echo "$NOAUTOMP" | grep '\s' >/dev/null 2>&1; then
+    notify-send -t 3600 "SPACE" "Mountpoint names include space. check them first. clean exit."
+    exit 0
+fi
+
+lsblkline_func () {
+    local LSBLKLN=$(lsblk -r | column -t | sed 's/\s/_/g')
+    local MAXLINE=$(echo "$LSBLKLN" | wc -L)
+    for i in $LSBLKLN; do
+        local ADDLN=$(($MAXLINE-$(echo -n "$i" | wc -c)))
+        echo ""$i"$(for i in $(seq $ADDLN); do echo -n "_"; done)"
+    done
+}
+
+mountnoauto_func () {
+    for i in $NOAUTOMP; do
+        if lsblk -r | grep "$i" >/dev/null 2>&1; then
+            notify-send -t 2700 "Already Mounted" ""$i" is already mounted."
+            continue
+        fi
+        mkdir -p "$i"
+        mount "$i"
+    done
+    notify-send -t 3600 "Mounted All" "$(lsblkline_func)"
+}
+umountnoauto_func () {
+    for i in $NOAUTOMP; do
+        if lsblk -r | grep "$i" >/dev/null 2>&1; then
+            umount "$i"
+            continue
+        fi
+        notify-send -t 2700 "NOT Mounted" ""$i" is NOT mounted."
+    done
+    notify-send -t 3600 "Unmounted All" "$(lsblkline_func)"
+}
+togglenoauto_func () {
+    local MOUN=0
+    local UMOUN=0
+    for i in $NOAUTOMP; do
+        if lsblk -r | grep "$i" >/dev/null 2>&1; then
+            local MOUN=1
+        else
+            local UMOUN=1
+        fi
+    done
+    if [ $((MOUN)) -eq 1 ] && [ $((UMOUN)) -eq 1 ]; then
+        notify-send -t 2700 "Can NOT Toggle" "Some are mounted, some are NOT. clean exit."
+        exit 0
+    fi
+    if [ $((MOUN)) -eq 1 ] && [ $((UMOUN)) -eq 0 ]; then
+        for i in $NOAUTOMP; do
+            umount "$i"
+        done
+        exit 0
+    fi
+    if [ $((MOUN)) -eq 0 ] && [ $((UMOUN)) -eq 1 ]; then
+        for i in $NOAUTOMP; do
+            mkdir -p "$i"
+            mount "$i"
+        done
+        exit 0
+    fi
+}
+interactive_func () {
+    # check if it is running in terminal or exit
+    case "$(ps -o stat= -p $$)" in
+        *+*) echo "continue..." ;;
+        *) notify-send -t 2700 "clean exit" "Please run it in terminal."; exit 0 ;;
+    esac
+    [ -f /tmp/noautomountpoints.msh ] && rm /tmp/noautomountpoints.msh
+    while true; do
+        local NUM=1
+        for i in $NOAUTOMP; do
+            if lsblk -r | grep "$i" >/dev/null 2>&1; then
+                echo ""$NUM". mounted    "$i""
+            else
+                echo ""$NUM". unmounted  "$i""
+            fi
+            local NUM=$((NUM+1))
+        done > /tmp/noautomountpoints.msh
+        while true; do
+            echo; lsblk
+            echo; cat /tmp/noautomountpoints.msh
+            echo; read -p "Type Number or [e|exit|q|quit] for Exit: " SNUM
+            case "$SNUM" in
+                e|exit|q|quit) echo "clean exit."; exit 0 ;;
+                [0-9]|[0-9][0-9]|[0-9][0-9][0-9]) echo "continue..." ;;
+                *) echo "Invalid selection. Repeated. Type number only."; continue ;;
+            esac
+            if ! grep "^$SNUM" /tmp/noautomountpoints.msh >/dev/null 2>&1; then
+                echo "Invalid selection. Repeated. Type number only."
+                unset SNUM
+                continue
+            fi
+            break
+        done
+        local SELINE=$(grep "^$SNUM" /tmp/noautomountpoints.msh)
+        local MSTATE=$(echo "$SELINE" | awk '{print $2}')
+        local MPOINT=$(echo "$SELINE" | awk '{print $3}')
+        case "$MSTATE" in
+            mounted) umount "$MPOINT" ;;
+            unmounted) mkdir -p "$MPOINT"; mount "$MPOINT" ;;
+            *) echo "Oop! something went wrong. clean exit."; exit 0 ;;
+        esac
+        echo; lsblk
+        echo; read -p "Exit or Continue? [e/c]; " CEYN
+        case "$CEYN" in
+            e|exit) break ;;
+            c|con|continue) continue ;;
+            *) echo "Invalid selection. clean exit."; exit 0 ;;
+        esac
+    done
+    [ -f /tmp/noautomountpoints.msh ] && rm /tmp/noautomountpoints.msh
+}
+helpusage_func () {
+    echo "
+    Usage:
+        noauto m|mount
+        noauto u|umount
+        noauto t|toggle
+        noauto c|check
+        noauto
+    "
+}
+
+case $1 in
+    m|mount) mountnoauto_func ;;
+    u|umount) umountnoauto_func ;;
+    t|toggle) togglenoauto_func ;;
+    c|check) lsblkline_func ;;
+    "") interactive_func ;;
+    h|help) helpusage_func ;;
+    *) echo "Invalid usage"; helpusage_func; exit 0 ;;
+esac
+</code></pre>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>
