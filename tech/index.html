@@ -22,6 +22,18 @@
             <hr class="normal">
         </header>
         <div>
+            <h2><a href="scripthandling.html">Handling Script's Behaviors</a></h2>
+            <p class="pdate">DATE 20240927</p>
+            <p>We often need to run our script avoiding certain situations like the followings.</p>
+            <ol>
+                <li>Avoiding running a script as ROOT.</li>
+                <li>Avoiding runnign a script in background.</li>
+                <li>Avoiding running a script if the script is already running.</li>
+                <li>Avoiding unnecessary remains exist.</li>
+            </ol>
+            <p class="readmore"><a href="scripthandling.html">READ MORE</a></p>
+        </div>
+        <div>
             <h2><a href="noauto.html">Mount/Unmount mountpoint that has user,noauto options in /etc/fstab</a></h2>
             <p class="pdate">DATE 20240817</p>
             <p>Mounting data partition to a mountpoint outside directory structure in <code>/etc/fstab</code> is a bit complicated. By default, the partitions are auto mounted to their mountpoints respectively at boot. But the problem is that, the owner of the mountpoint would be <code>root</code> and being without write permission for normal user because mount command was executed by root. On the other hand, the line in <code>/etc/fstab</code> that has <code>user,noauto</code> options is not auto mounted at boot. It can be mounted later as normal user by just running the following.</p>
@@ -42,7 +54,13 @@
             <hr class="normal">
         </div>
         <div>
-            <h2><a href="./dmmsh-wlr.html">dmmsh-wlr for managing outputs in Wayland using wlr-randr</a></h2>
+            <h2><a href="mshdiff.html">mshdiff for generating filename.diff file for patching</a></h2>
+            <p class="pdate">DATE 20240926</p>
+            <p>If you need to compare files between two directories and generate a patch file, the following script can help you achieve this efficiently. This guide will explain the script's functionality and how to use it.</p>
+            <p class="readmore"><a href="mshdiff.html">READ MORE</a></p>
+        </div>
+        <div>
+            <h2><a href="dmmsh-wlr.html">dmmsh-wlr for managing outputs in Wayland using wlr-randr</a></h2>
             <p class="pdate">DATE 20240729</p>
             <p>Managing outputs in Wayland is smooth and easy by using wlr-randr while some compositors such as sway and hyprland have their own tools to manage outputs. See: sway-output(5) man page and Monitors - Hyprland Wiki respectively.</p>
             <p class="readmore"><a href="">READ MORE</a></p>

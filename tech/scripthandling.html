@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="../legal">Legal</a>&emsp;
+                <a href="../business">Business</a>&emsp;
+                <a href="../else">Else</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>Handling Script's Behaviors</h2>
+            <p class="pdate">DATE 20240927</p>
+            <p>We often need to run our script avoiding certain situations like the followings.</p>
+            <ol>
+                <li>Avoiding running a script as ROOT.</li>
+                <li>Avoiding running a script in background.</li>
+                <li>Avoiding running a script if the script is already running.</li>
+                <li>Avoiding unnecessary remains exist.</li>
+            </ol>
+            <h3>Avoiding running a script as ROOT</h3>
+            <p>It is undesirable if a script was accidentally run as ROOT while the script is supposed to be run as NORMAL user. To avoid this situation:</p>
+            <pre><code># test if it is running as ROOT and exit.
+if [ $(($(id -u))) -eq 0 ]; then
+        exit 0
+fi</code></pre>
+            <h3>Avoiding running a script in background</h3>
+            <p>It is undesirable if a script was accidentally run in background by applauncher like <code>wmenu</code> or <code>bemenu</code> while the script is supposed to be run in a terminal interactively. To avoid this situation:</p>
+            <pre><code># test if it is running in terminal or exit.
+case "$(ps -o stat= -p $$)" in
+    *+*) echo "continue..." ;;
+    *) notify-send -t 2700 "clean exit" "please run it in terminal."; exit 0 ;;
+esac</code></pre>
+            <h3>Avoiding running a script if the script is already running</h3>
+            <p>It is undesirable if a script was accidentally run while the script is already running in background or in another terminal. To avoid this situation:</p>
+            <pre><code># test if it is already running or exit.
+SCRIPTNAME="$(basename -- $0)"
+if pidof -x "$SCRIPTNAME" -o $$ > /dev/null 2>&1; then
+    echo "the script is already running. clean exit."
+    exit 0
+fi</code></pre>
+            <h3>Avoiding unnecessary remains exist</h3>
+            <p>It is undesirable if a script was run and unnecessary remains like helper files were left. To avoid this situation:</p>
+            <pre><code># setting trap for cleaning helper files
+trap "cleanhelperfiles_func; trap EXIT; exit 0" INT EXIT
+cleanhelperfiles_func () {
+    local HELPERFILES=""$KEYFILE" "$MOULIST""
+    local IFS=" "
+    for i in $HELPERFILES; do
+        if [ -f "$i" ]; then
+            rm "$i"
+            sleep 0.5
+        fi
+    done
+    keyctl clear @u
+    echo "trap @ cleanhelperfiles_fun for INT & EXIT. clean exit"
+}</code></pre>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>
