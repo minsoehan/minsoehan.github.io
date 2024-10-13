@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Min Soe Han</title>
+        <link href="../mshcss/mshstyle.css" rel="stylesheet">
+        <link href="../mshcss/github-dark.css" rel="stylesheet">
+        <script src="../mshcss/highlight.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <header>
+            <h1 class="mainheader"><a href="../">Min Soe Han</a></h1>
+            <p class="mainheader">
+                <a href="../legal">Legal</a>&emsp;
+                <a href="../business">Business</a>&emsp;
+                <a href="../else">Else</a>&emsp;
+            </p>
+            <hr class="mainheader">
+            <p><a href="./">back</a>&emsp;<b>Tech:</b></p>
+            <hr class="normal">
+        </header>
+        <div>
+            <h2>git: pre-received hook declined</h2>
+            <p class="pdate">DATE 20241013</p>
+            <img src="../stuffs/git-pre-receive-error-p1.png" alt="git-pre-receive-error-e1" style="width: 100%; height: auto;">
+            <p>If you used <code>git config credential.helper store</code> for many repos and multiple users, you might encounter the error of the image saying that</p>
+            <pre class="nohighlight" style="background-color: #222222; color: #dddddd; padding: 9px;"><code>! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://codeberg.org/minsoehan/pages.git'</code></pre>
+            <p>The quick solution, although it cannot be recommended as proper solution, is to remove the following from your <code>./.git/config</code> file in your repo.</p>
+            <pre class="nohighlight" style="background-color: #222222; color: #dddddd; padding: 9px;"><code>[credential]
+        helper = store</code></pre>
+            <p>To get rid of typing your password, put your username and password at the line of <code>url = https://example.com/username/reponame.git</code> in the <code>./.git/config</code> file as follows.</p>
+            <pre class="nohighlight" style="background-color: #222222; color: #dddddd; padding: 9px;"><code>[remote "origin"]
+        url = https://username:password@github.com/username/reponame.git
+        fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
+            <hr class="normal">
+        </div>
+        <footer>
+            <p><b>Contact</b><br><code>minsoehan243@gmail.com<br>+95 9 25 731 3341</code></p>
+        </footer>
+    </body>
+</html>

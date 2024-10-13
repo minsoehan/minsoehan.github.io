@@ -22,6 +22,16 @@
             <hr class="normal">
         </header>
         <div>
+            <h2><a href="git-pre-received.html">git: pre-received hook declined</a></h2>
+            <p class="pdate">DATE 20241013</p>
+            <p>If you used <code>git config credential.helper store</code> for many repos and multiple users, you might encounter the error of the image saying that</p>
+            <pre class="nohighlight" style="background-color: #222222; color: #dddddd; padding: 9px;"><code>! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://codeberg.org/minsoehan/pages.git'</code></pre>
+            <p>The quick solution, although it cannot be recommended as proper solution, is to remove the following from your <code>./.git/config</code> file in your repo.</p>
+            <p class="readmore"><a href="git-pre-received.html">READ MORE</a></p>
+            <hr class="normal">
+        </div>
+        <div>
             <h2><a href="scripthandling.html">Handling Script's Behaviors</a></h2>
             <p class="pdate">DATE 20240927</p>
             <p>We often need to run our script avoiding certain situations like the followings.</p>
