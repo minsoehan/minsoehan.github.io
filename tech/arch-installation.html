@@ -117,7 +117,7 @@
 # swapon /dev/sda3</code></pre>
             <h3>Installing Base System</h3>
             <p>At this stage, base system can be installed. It is also recommended to install other useful packages such as <code>base-devel</code>, <code>nano</code>, <code>nvim</code>, <code>networkmanager</code>.</p>
-            <pre class="nohlcmd"><code># pacstrap /mnt base linux linux-firmware base-devel nvim networkmanager</code></pre>
+            <pre class="nohlcmd"><code># pacstrap /mnt base linux linux-firmware base-devel neovim networkmanager</code></pre>
             
             <!-- Configuration -->
             <h3>Configuration</h3>
@@ -133,7 +133,7 @@
             <h4>Generate Locale</h4>
             <pre class="nohlcmd"><code># locale-gen</code></pre>
             <h4>Create Locale File</h4>
-            <pre class="nohlcmd"><code># nano /etc/locale.conf<hr>LANG=en_US.UTF-8 UTF-8</code></pre>
+            <pre class="nohlcmd"><code># nano /etc/locale.conf<hr>LANG=en_US.UTF-8</code></pre>
             <h4>Hostname</h4>
             <pre class="nohlcmd"><code># nano /etc/hostname</code><hr><i>myhostname</i></pre>
             <h4>Hosts</h4>
