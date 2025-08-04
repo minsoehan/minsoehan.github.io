@@ -1,0 +1,4 @@
+{{ $md := .Get 0 }}
+{{ with .Page.GetPage $md }}
+{{ .Content }}
+{{ end }}

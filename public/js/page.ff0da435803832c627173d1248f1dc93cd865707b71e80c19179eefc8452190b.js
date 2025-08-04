@@ -1,0 +1,1 @@
+(()=>{document.addEventListener("DOMContentLoaded",function(){let e=document.getElementById("expand-right-onoff"),n=document.querySelector("main .page");e.addEventListener("click",()=>{n.classList.toggle("wide"),e.innerHTML=n.classList.contains("wide")?"arrow_circle_left":"expand_circle_right"})});})();
