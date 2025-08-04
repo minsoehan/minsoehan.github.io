@@ -1,1 +1,0 @@
-(()=>{document.addEventListener("DOMContentLoaded",function(){o()});function o(){document.querySelectorAll("i.fa-solid.fa-link").forEach(t=>{t.addEventListener("click",i=>{let n=i.target.parentElement.id;if(!n)return;let e=`${window.location.origin}${window.location.pathname}#${n}`;navigator.clipboard.writeText(e),alert("The link is copied.")})})}})();
