@@ -2,8 +2,6 @@ baseURL = 'https://minsoehan.pages.dev/'
 languageCode = 'en-us'
 title = 'Min Soe Han'
 
-enableRobotsTXT = true
-
 [minify]
     minifyOutput = true
 
