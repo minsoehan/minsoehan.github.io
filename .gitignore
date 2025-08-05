@@ -67,6 +67,3 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
-
-# msh added below
-public/
