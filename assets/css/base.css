@@ -119,7 +119,8 @@ main i.fa-solid.fa-link {
 main h1, main h2, main h3, main h4, main p, main table.list tr td {
     scroll-margin-top: 6rem;
 }
-table.list caption {
+table.list caption,
+table.list td.title {
     font-weight: 600;
     text-align: left;
 }
