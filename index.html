@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Soe Han</title>
+    <style>
+        .redirect-noti {
+            text-align: center;
+            width: 360px;
+            font-size: large;
+            border: 1px solid gray;
+            border-radius: 1rem;
+            padding: 1rem;
+            line-height: 1.8;
+            margin: 3rem auto;
+        }
+        .redirect-button {
+            border: 1px solid lightgray;
+            border-radius: 1rem;
+        }
+        .redirect-button a {
+            display: inline-block;
+            text-decoration: none;
+        }
+        @media screen and (max-width: 500px) {
+            .redirect-noti {
+                width: 90%;
+            }
+        }
+    </style>
+    <script>
+        if (location.pathname !== "/" && location.pathname !== "/index.html") {
+            window.location.replace("/index.html");
+        }
+    </script>
+</head>
+<body>
+    <div class="redirect-noti">
+        <p>This site is still under construction.<br>Please, go to:</p>
+        <div class="redirect-button"><a href="https://minsoehan.com/">https://minsoehan.com/&ensp;&rarr;</a></div>
+    </div>
+</body>
+</html>
